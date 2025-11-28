@@ -1,0 +1,54 @@
+# frps.toml
+# Ref: https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml
+# ----------
+# | Common |
+# ----------
+bindPort = 5000
+# vhostHTTPPort = 5880
+# vhostHTTPSPort = 6443
+tcpmuxHTTPConnectPort = 5002
+
+# SSL for connection between frpc & frps
+#transport.tls.certFile = "/ssl/frp.crt"
+#transport.tls.keyFile = "/ssl/frp.key"
+
+# custom 404 page for HTTP requests
+custom404Page = "/etc/frp/404.html"
+
+userConnTimeout = 3600
+vhostHTTPTimeout = 3600
+
+# ------------------
+# | AUTHENTICATION |
+# ------------------
+
+# auth.method specifies what authentication method to use authenticate frpc with frps.
+# If "token" is specified - token will be read into login message.
+# If "oidc" is specified - OIDC (Open ID Connect) token will be issued using OIDC settings. By default, this value is "token".
+auth.method = "token"
+
+# auth.additionalScopes specifies additional scopes to include authentication information.
+# Optional values are HeartBeats, NewWorkConns.
+# auth.additionalScopes = ["HeartBeats", "NewWorkConns"]
+
+# auth token
+auth.token = "{{ .Envs.FRP_TOKEN }}"
+
+# ------------------------
+# | Web server dashboard |
+# ------------------------
+# webServer.addr = "0.0.0.0"
+# webServer.port = 5500
+# webServer.user = "admin"
+# webServer.password = "admin"
+
+# -----------
+# | LOGGING |
+# -----------
+# console or real logFile path like ./frps.log
+log.to = "/log/frps.log"
+# trace, debug, info, warn, error
+log.level = "info"
+log.maxDays = 3
+# disable log colors when log.to is console, default is false
+log.disablePrintColor = true

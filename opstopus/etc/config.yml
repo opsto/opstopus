@@ -1,0 +1,6 @@
+# Opstopus Backend Configuration
+
+gunicorn:
+  bind: "0.0.0.0:5080"
+  workers: 8
+  threads: 4

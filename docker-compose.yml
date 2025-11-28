@@ -1,0 +1,41 @@
+services:
+  opstopus:
+    # --------------------- Image / container ---------------------
+    build:
+      context: ./docker/opstopus/0.25.11
+      dockerfile: Dockerfile
+    image: opsto/opstopus:0.25.11
+    user: root
+    ipc: host
+    environment:
+      FRP_TOKEN: frp@opstopus               # TODO: CHANGE DEFAULT FRP AUTH TOKEN
+    # ----------- Volumes -----------
+    volumes:
+      - ./opstopus:/opstopus
+      - ./_data/log/opstopus:/var/log/opstopus
+    # ------------- Execution -------------
+    working_dir: /opstopus
+    entrypoint: /bin/bash
+    command: -c 'chmod +x *.sh && ./run.sh'
+    restart: unless-stopped     # or "always", "no" (default)    
+    # ----------- Networking -----------
+    expose:
+      - 5080
+    ports:
+      - 5080:5080
+
+  frps:
+    image: snowdreamtech/frps:0.65.0
+    environment:
+      FRP_TOKEN: frp@opstopus               # TODO: CHANGE DEFAULT FRP AUTH TOKEN
+    volumes:
+      - ./etc/frp:/etc/frp
+      - ./_data/log:/log
+    ports:
+      - 5000:5000       # bind port for frpc
+      # - 5880:5880   # vhostHTTPPort
+      # - 5500:5500   # frpc dashboard
+      # - 6443:6443   # vhostHTTPSPort
+      - 5002:5002       # Multiple SSH services sharing the same port
+      #####- 8554:8554     # TriS Vinh Long local address => rtsp://172.20.150.147:554
+    restart: always

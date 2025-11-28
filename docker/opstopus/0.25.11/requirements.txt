@@ -1,0 +1,5 @@
+omegaconf==2.3.0
+falcon==4.2.0
+gunicorn==23.0.0
+PyYAML>=6.0
+pytest>=8.0.0
